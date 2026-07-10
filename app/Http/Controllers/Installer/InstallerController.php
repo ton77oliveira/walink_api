@@ -29,6 +29,7 @@ class InstallerController extends Controller
 
         try {
             if (Schema::hasTable('users') && DB::table('users')->count() > 0) {
+                File::put(public_path('uploads/installed'), 'restored');
                 return redirect('/');
             }
         } catch (\Exception $e) {
@@ -165,6 +166,7 @@ class InstallerController extends Controller
 
         try {
             if (Schema::hasTable('users') && DB::table('users')->count() > 0) {
+                File::put(public_path('uploads/installed'), 'restored');
                 return redirect('/');
             }
         } catch (\Exception $e) {

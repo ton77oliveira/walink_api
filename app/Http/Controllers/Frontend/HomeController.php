@@ -22,7 +22,15 @@ class HomeController extends Controller
     public function index()
     {
          if (!file_exists(public_path('uploads/installed'))) {
-            return redirect('/install');
+            try {
+                if (\Schema::hasTable('users') && \DB::table('users')->count() > 0) {
+                    \File::put(public_path('uploads/installed'), 'restored');
+                } else {
+                    return redirect('/install');
+                }
+            } catch (\Exception $e) {
+                return redirect('/install');
+            }
          }
         
         $brands = Category::where('type','brand')->where('status',1)->latest()->get();
