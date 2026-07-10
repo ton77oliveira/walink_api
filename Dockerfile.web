@@ -1,7 +1,9 @@
 FROM composer:2.7 AS vendor
 WORKDIR /app
 COPY composer.json composer.lock ./
-RUN mkdir -p Modules/Wacore && touch Modules/Wacore/composer.json
+COPY modules_statuses.json ./
+RUN mkdir -p Modules/Wacore database/migrations && \
+    touch Modules/Wacore/composer.json database/migrations/.gitkeep
 RUN composer install \
     --no-dev \
     --no-interaction \
@@ -17,7 +19,6 @@ COPY . /var/www/html
 RUN mkdir -p /var/www/html/storage/framework/{cache,sessions,views,testing} \
     /var/www/html/storage/logs \
     /var/www/html/bootstrap/cache && \
-    apt-get update && apt-get install -y --no-install-recommends cron && \
     chown -R webuser:webgroup /var/www/html/storage /var/www/html/bootstrap/cache && \
     chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 USER webuser
