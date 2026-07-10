@@ -19,7 +19,7 @@ $enabled=true;
          <div class="col-sm-6">
             <div class="form-group">
                <label>{{ __('Database Host') }}</label>
-               <input type="text" name="db_host" class="form-control" required="" placeholder="localhost" maxlength="20" value="localhost">
+               <input type="text" name="db_host" class="form-control" required="" placeholder="localhost" maxlength="50" value="localhost">
             </div>
          </div>
          <div class="col-sm-6">
