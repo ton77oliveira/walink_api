@@ -22,12 +22,11 @@ COPY . /var/www/html
 RUN mkdir -p /var/www/html/storage/framework/{cache,sessions,views,testing} \
     /var/www/html/storage/logs \
     /var/www/html/bootstrap/cache && \
-    chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public/uploads && \
-    chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public/uploads && \
+    chown -R www-data:www-data /var/www/html && \
     find /var/www/html -type d -exec chmod 755 {} \; && \
     find /var/www/html -type f -exec chmod 644 {} \; && \
-    chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache && \
-    cp /var/www/html/.env.example /var/www/html/.env && \
+    chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public/uploads && \
+    printf 'APP_NAME=Whatsender\nAPP_ENV=staging\nAPP_KEY=base64:3ABQcuzZaSyyiOXyOy8NPy1k/KppeWTx41U6m8xe9f4=\nAPP_DEBUG=true\nAPP_URL=https://walink.com.br\nAPP_URL_WITHOUT_SSL=http://walink.com.br\nLOG_CHANNEL=stack\nLOG_LEVEL=debug\nDB_CONNECTION=mysql\nDB_HOST=temporarios_mysql_walink_api\nDB_PORT=3306\nDB_DATABASE=walink_api\nDB_USERNAME=root\nDB_PASSWORD=mmk4zlvdy2mdlsdc8zql\nBROADCAST_DRIVER=log\nCACHE_DRIVER=file\nQUEUE_CONNECTION=database\nSESSION_DRIVER=file\nWA_SERVER_URL=http://walink_api-node:8000\nWA_SERVER_HOST=walink_api-node\nWA_SERVER_PORT=8000\nWA_SERVER_MAX_RETRIES=5\nWA_SERVER_RECONNECT_INTERVAL=5000\nAUTHENTICATION_GLOBAL_AUTH_TOKEN=staging_token_2024\nTIME_ZONE=America/Sao_Paulo\nDEFAULT_LANG=en\nSITE_KEY=\n' > /var/www/html/.env && \
     chown www-data:www-data /var/www/html/.env && \
     rm -f /var/www/html/bootstrap/cache/packages.php /var/www/html/bootstrap/cache/services.php && \
     cd /var/www/html && php artisan package:discover --ansi 2>/dev/null; true
