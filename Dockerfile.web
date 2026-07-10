@@ -2,7 +2,6 @@ FROM composer:2.7 AS vendor
 WORKDIR /app
 COPY composer.json composer.lock ./
 RUN mkdir -p Modules/Wacore && touch Modules/Wacore/composer.json
-COPY Modules/Wacore/composer.json Modules/Wacore/composer.json 2>/dev/null || true
 RUN composer install \
     --no-dev \
     --no-interaction \
@@ -11,22 +10,14 @@ RUN composer install \
     --ignore-platform-reqs \
     --prefer-dist
 
-FROM node:20-alpine AS build
-WORKDIR /app
-COPY package.json package-lock.json ./
-RUN npm ci --ignore-scripts 2>/dev/null || npm install --ignore-scripts 2>/dev/null || true
-COPY . .
-RUN npm run build 2>/dev/null || true
-
 FROM serversideup/php:8.2-fpm-nginx
 USER root
 COPY --from=vendor /app/vendor /var/www/html/vendor
-COPY --from=build /app/public/build /var/www/html/public/build 2>/dev/null || true
 COPY . /var/www/html
 RUN mkdir -p /var/www/html/storage/framework/{cache,sessions,views,testing} \
     /var/www/html/storage/logs \
     /var/www/html/bootstrap/cache && \
+    apt-get update && apt-get install -y --no-install-recommends cron && \
     chown -R webuser:webgroup /var/www/html/storage /var/www/html/bootstrap/cache && \
-    chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache && \
-    chmod -R 775 /var/www/html/public/build 2>/dev/null || true
+    chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 USER webuser
