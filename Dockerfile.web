@@ -15,7 +15,8 @@ RUN composer install \
 FROM serversideup/php:8.2-fpm-nginx
 ENV NGINX_HTTP_PORT=80
 USER root
-RUN install-php-extensions bcmath
+RUN install-php-extensions bcmath && \
+    echo 'variables_order = EGPCS' > /usr/local/etc/php/conf.d/variables_order.ini
 COPY --from=vendor /app/vendor /var/www/html/vendor
 COPY . /var/www/html
 RUN mkdir -p /var/www/html/storage/framework/{cache,sessions,views,testing} \
