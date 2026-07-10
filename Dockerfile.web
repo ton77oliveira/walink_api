@@ -27,6 +27,7 @@ RUN mkdir -p /var/www/html/storage/framework/{cache,sessions,views,testing} \
     find /var/www/html -type f -exec chmod 644 {} \; && \
     chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache && \
     cp /var/www/html/.env.example /var/www/html/.env && \
+    chown www-data:www-data /var/www/html/.env && \
     rm -f /var/www/html/bootstrap/cache/packages.php /var/www/html/bootstrap/cache/services.php && \
     cd /var/www/html && php artisan package:discover --ansi 2>/dev/null; true
 USER www-data
