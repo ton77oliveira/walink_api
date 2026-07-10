@@ -2,15 +2,15 @@ FROM composer:2.7 AS vendor
 WORKDIR /app
 COPY composer.json composer.lock ./
 COPY modules_statuses.json ./
-RUN mkdir -p Modules/Wacore database/migrations && \
-    touch Modules/Wacore/composer.json database/migrations/.gitkeep
+RUN mkdir -p Modules/Wacore && touch Modules/Wacore/composer.json
 RUN composer install \
     --no-dev \
     --no-interaction \
     --no-progress \
     --optimize-autoloader \
     --ignore-platform-reqs \
-    --prefer-dist
+    --prefer-dist \
+    --no-scripts
 
 FROM serversideup/php:8.2-fpm-nginx
 USER root
@@ -20,5 +20,6 @@ RUN mkdir -p /var/www/html/storage/framework/{cache,sessions,views,testing} \
     /var/www/html/storage/logs \
     /var/www/html/bootstrap/cache && \
     chown -R webuser:webgroup /var/www/html/storage /var/www/html/bootstrap/cache && \
-    chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+    chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache && \
+    cd /var/www/html && php artisan package:discover --ansi 2>/dev/null || true
 USER webuser
