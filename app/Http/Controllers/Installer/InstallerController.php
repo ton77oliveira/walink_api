@@ -11,6 +11,7 @@ use Config;
 use DB;
 use File;
 use Cache;
+use Schema;
 class InstallerController extends Controller
 {
 
@@ -22,10 +23,17 @@ class InstallerController extends Controller
      */
     public function index()
     {
-
         if (file_exists(public_path('uploads/installed'))) {
             return redirect('/');
         }
+
+        try {
+            if (Schema::hasTable('users') && DB::table('users')->count() > 0) {
+                return redirect('/');
+            }
+        } catch (\Exception $e) {
+        }
+
         \Cache::forget('files');
         \Cache::forget('installed');
 
@@ -151,6 +159,17 @@ class InstallerController extends Controller
      */
     public function show($type)
     {
+        if (file_exists(public_path('uploads/installed'))) {
+            return redirect('/');
+        }
+
+        try {
+            if (Schema::hasTable('users') && DB::table('users')->count() > 0) {
+                return redirect('/');
+            }
+        } catch (\Exception $e) {
+        }
+
         if ($type == 'purchase') {
             if (!Cache::has('files')) {
              return view('installer.purchase');
@@ -182,6 +201,13 @@ class InstallerController extends Controller
     {
         if (file_exists('uploads/installed')) {
             return redirect('/');
+        }
+
+        try {
+            if (Schema::hasTable('users') && DB::table('users')->count() > 0) {
+                return redirect('/');
+            }
+        } catch (\Exception $e) {
         }
 
        
