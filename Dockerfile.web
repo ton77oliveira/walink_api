@@ -22,7 +22,7 @@ COPY . /var/www/html
 RUN mkdir -p /var/www/html/storage/framework/{cache,sessions,views,testing} \
     /var/www/html/storage/logs \
     /var/www/html/bootstrap/cache && \
-    chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public/uploads && \
+    chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public/uploads /var/www/html/lang && \
     chmod -R 755 /var/www/html/vendor /var/www/html/app /var/www/html/config /var/www/html/database /var/www/html/lang /var/www/html/resources /var/www/html/routes /var/www/html/Modules /var/www/html/bootstrap /var/www/html/public /var/www/html/Modules && \
     chmod 644 /var/www/html/composer.json /var/www/html/composer.lock /var/www/html/package.json /var/www/html/phpunit.xml /var/www/html/modules_statuses.json && \
     chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public/uploads && \
